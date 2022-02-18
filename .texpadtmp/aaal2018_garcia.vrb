@@ -1,0 +1,16 @@
+\frametitle{Appendix iv}\framesubtitle {Variance: Why the Bayesian model is superior}
+\label{ap:variance}
+
+\begin{itemize}
+
+	\item More closely approximates empirical sampling distributions:
+	\item[\win] coefficients + residual standard error
+	\item[]
+	\item We still see the trend generated
+	\item[\win] But our certainty shifts (i.e., more conservative)
+	\item In part because our Bayesian model is not conditional on H$_0$:
+	\item[] it's averaging across \bsu{all} possible values of $\sigma^2$
+
+\end{itemize}
+
+

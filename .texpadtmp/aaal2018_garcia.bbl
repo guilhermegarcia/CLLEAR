@@ -1,0 +1,26 @@
+\newcommand{\SortNoop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Cumming, 2014]{cumming2014new}
+Cumming, G. (2014).
+\newblock The new statistics: {W}hy and how.
+\newblock {\em Psychological science}, 25(1):7--29.
+
+\bibitem[Kruschke, 2015]{kruschke2015doing}
+Kruschke, J. (2015).
+\newblock {\em Doing Bayesian data analysis: a tutorial with R, JAGS, and
+  Stan}.
+\newblock London: Academic Press, 3rd edition.
+
+\bibitem[Schwartz and Sprouse, 1996]{schwartz1996l2}
+Schwartz, B.~D. and Sprouse, R. (1996).
+\newblock L2 cognitive states and the full transfer/full access model.
+\newblock {\em Second Language Research}, 12(1):40--72.
+
+\bibitem[White, 2000]{white_2000}
+White, L. (2000).
+\newblock Second language acquisition: from initial to final state.
+\newblock In Archibald, J., editor, {\em Second language acquisition and
+  linguistic theory}, pages 130--155. Oxford: Wiley-Blackwell.
+
+\end{thebibliography}
