@@ -193,7 +193,7 @@ ggplot(data = dLong, aes(x = Hours, y = Score)) +
   theme_classic() +
   theme(legend.position = "top") +
   theme(text = element_text(size = 18)) +
-  scale_color_manual(values = c("red", "blue")) +
+  scale_color_manual(values = c("orange", "brown")) +
   geom_vline(xintercept = 14.3, linetype = "dashed")
 
 p = ggplotly() %>%
