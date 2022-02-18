@@ -706,17 +706,40 @@ class: inverse, center, middle
 
 # Same model, but now using Bayes
 
-- Here, visualization is **even more important**
+- Here, visualization is **even more important**, since estimates are distributions
+- The areas below show the **posterior distribution** of all estimates
+- Means and 95% highest density intervals (HDI) are also provided
+
+<br>
+
+```{r, message=F, echo=F, dev="svg", fig.align='center', fig.width=7, fig.height=3.5}
+library(brms)
+load("fitB.RData")
+
+bayesplot::mcmc_areas(fitB, pars = c("b_H", "b_FbRecast",
+                                     "b_H:FbRecast"),
+                      prob = 0.95, point_est = "mean") +
+  theme(text = element_text(family = "Arial", size = 18)) +
+  labs(x = "Estimate")
+```
+
 
 ---
 
-# Interactive figures
+# Interactive figures 
 
 - There are different options in R; <mark>`plotly`</mark> is a great one
 
+<div align = "center">
+<iframe src="plotly.html" scrolling="no" seamless="seamless" align="center" frameBorder="0" height="400" width="80%"></iframe>
+</div>
+
+- This can be useful **if** interactivity serves a purpose 
 
 ---
 
 class: inverse, center, middle
 
 # Thank you!
+
+<img src="qr.png" alt="Access slides" style="width:20%">

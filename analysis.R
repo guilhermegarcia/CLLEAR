@@ -1,5 +1,15 @@
 library(tidyverse)
 library(plotly)
+library(scales)
+library(party)
+library(lme4)
+library(plotly)
+library(brms)
+library(sjPlot)
+library(arm)
+library(broom)
+library(knitr)
+
 d = read_csv("feedbackData.csv")
 
 dLong = d %>% 
@@ -9,14 +19,13 @@ dLong = d %>%
   mutate(Task = str_sub(Task, start = -2L, end = -1L ),
          Item = str_sub(Task, start = -1L, end = -1L),
          Task = str_sub(Task, start = -2L, end = -2L)) %>% 
-  select(ID:Task, Item, Score)
+  dplyr::select(ID:Task, Item, Score)
 
 dLong = dLong %>% 
   mutate(across(where(is.character), as.factor))
 
 str(dLong)
 
-library(lme4)
 fit = lmer(Score ~ Feedback * L1 + (1 + Feedback | ID) + 
              (1 | Item), data = dLong)
 
@@ -33,7 +42,7 @@ ggplot(data = tibble(x = c(-2.5, 2.5)),
                 xlim = c(-2, -2),
                 geom = "point",
                 alpha = 1, size = 8,
-                color = "red")
+                color = "red") +
   theme_classic() + 
   theme(axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -96,7 +105,7 @@ ggplot(data = dLong, aes(x = Feedback, y = Score, label = L1)) +
 ggplotly(tooltip = c("L1", "ID", "Score"))
 
 
-library(party)
+
 
 fit = ctree(Score ~ L1 + Sex + Hours + Feedback + Task, data = dLong)
 
@@ -110,10 +119,7 @@ plot(fit,
                     fill = alpha(c("gray70", "gray50", "gray30"))))
 
 
-library(arm)
-library(broom)
-library(knitr)
-library(sjPlot)
+
 
 model = lmer(Score ~ Hours * Feedback + 
                (1 | ID) + (1 | Item), data = dLong)
@@ -145,7 +151,7 @@ ggplot(data = dLong, aes(x = Hours, y = Score)) +
   scale_color_manual(values = c("red", "blue")) +
   geom_vline(xintercept = 14.3, linetype = "dashed")
   
-library(scales)
+
 
 plot_model(model.std, show.values = T) + 
   labs(title = NULL) +
@@ -159,4 +165,52 @@ new = tibble(Hours = rep(seq(10, 25, 1), each = 10),
              Feedback = rep(c("Explicit correction",
                               "Recast"), times = 80))
 
+dLong = dLong %>% 
+  mutate(H = rescale(Hours),
+         Fb = Feedback)
+dLong
+# fitB = brm(Score ~ H * Fb,
+#            data = dLong,
+#            family = "Gaussian",
+#            cores = 4)
 
+
+# save(fitB, file = "fitB.RData")
+load("fitB.RData")
+
+bayesplot::mcmc_areas(fitB, pars = c("b_H", "b_FbRecast",
+                                     "b_H:FbRecast"),
+                      prob = 0.95, point_est = "mean") +
+  theme(text = element_text(family = "Arial", size = 18),
+        axis.text = element_text(face = "plain")) + 
+  labs(x = "Estimate")
+
+
+
+ggplot(data = dLong, aes(x = Hours, y = Score)) + 
+  geom_point(alpha = 0.1, size = 4, aes(group = ID)) + 
+  stat_smooth(method = lm, aes(color = Feedback)) + 
+  theme_classic() +
+  theme(legend.position = "top") +
+  theme(text = element_text(size = 18)) +
+  scale_color_manual(values = c("red", "blue")) +
+  geom_vline(xintercept = 14.3, linetype = "dashed")
+
+p = ggplotly() %>%
+  layout(legend = list(
+    orientation = "h",
+    y = 5)) %>% 
+  config(displayModeBar = FALSE,
+         displaylogo = FALSE)
+
+
+library(htmlwidgets)
+saveWidget(p, "plotly.html", selfcontained = F, libdir = "lib")
+
+
+htmltools::tags$iframe(
+  src = "plotly.html", 
+  scrolling = "no", 
+  seamless = "seamless", align = "center",
+  frameBorder = "0", height = 400, width = "80%",
+)
