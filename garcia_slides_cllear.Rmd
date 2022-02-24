@@ -39,16 +39,9 @@ class: inverse, center, middle
 
 ```{r xaringan-tile-view, echo=FALSE}
 xaringanExtra::use_tile_view()
-```
-
-```{r setup, include=FALSE}
+xaringanExtra::use_scribble()
 options(htmltools.dir.version = FALSE)
 ```
-
-```{r xaringan-scribble, echo=FALSE}
-xaringanExtra::use_scribble()
-```
-
 
 
 
@@ -539,6 +532,11 @@ ggplot(data = dLong, aes(x = Hours, y = Score)) +
 ]
 
 - Now we have a better sense of what to include in our analysis
+
+???
+
+- Notice that points aren't colored 
+- That would be too cluttered; no clear visual separation with this data
 
 ---
 
