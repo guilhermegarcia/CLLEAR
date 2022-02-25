@@ -602,7 +602,8 @@ tab_model(model.std, show.r2 = T,
 
 # Visualizing the interaction
 
-- Back to our figure:
+- Back to our figure. Notice that each participant has 10 points in the figure (2 tasks $\times$ 5 items)
+- It may be better if each point represents the *average* score of each participant across all 10 items
 
 ```{r, message=F, echo=F, dev="svg", fig.align='center', fig.width=7, fig.height=4.5}
 
@@ -611,10 +612,38 @@ ggplot(data = dLong, aes(x = Hours, y = Score)) +
   geom_smooth(method = lm, aes(color = Feedback)) + 
   theme_classic() +
   theme(legend.position = "top") +
+  coord_cartesian(ylim = c(40, 100)) +
   theme(text = element_text(size = 18)) +
   scale_color_manual(values = c("orange", "brown")) +
   geom_vline(xintercept = 14.6, linetype = "dashed")
 ```
+
+---
+
+# Visualizing the interaction
+
+- Now, each point = grand average of each participant
+- Notice how participants' averages are clustered around our trend lines
+
+```{r, message=F, echo=F, dev="svg", fig.align='center', fig.width=7, fig.height=4.5}
+
+bySpeaker = dLong %>% 
+  group_by(ID, Feedback, Hours) %>% 
+  summarize(Score = mean(Score))
+
+ggplot(data = dLong, aes(x = Hours, y = Score)) + 
+  geom_point(data = bySpeaker, alpha = 0.4, 
+             size = 4, aes(group = ID, 
+                           color = Feedback)) + 
+  geom_smooth(method = lm, aes(color = Feedback)) + 
+  theme_classic() +
+  coord_cartesian(ylim = c(40, 100)) +
+  theme(legend.position = "top") +
+  theme(text = element_text(size = 18)) +
+  scale_color_manual(values = c("orange", "brown")) +
+  geom_vline(xintercept = 14.6, linetype = "dashed")
+```
+
 
 ---
 
@@ -641,11 +670,13 @@ plot_model(model.std) + #<<
 ```{r, message=F, echo=F, dev="svg", fig.align='center', fig.width=7, fig.height=4.5}
 
 ggplot(data = dLong, aes(x = Hours, y = Score)) + 
-  geom_point(alpha = 0.05, size = 4) + 
+  geom_point(data = bySpeaker, alpha = 0.2, 
+             size = 4, aes(group = ID)) + 
   geom_smooth(method = lm, aes(color = Feedback)) + 
   theme_classic() +
+  coord_cartesian(ylim = c(40, 100)) +
   theme(legend.position = "top") +
-  theme(text = element_text(size = 20)) +
+  theme(text = element_text(size = 18)) +
   scale_color_manual(values = c("orange", "brown")) +
   geom_vline(xintercept = 14.6, linetype = "dashed")
 ```
@@ -729,7 +760,7 @@ bayesplot::mcmc_areas(fitB, pars = c("b_H", "b_FbRecast",
 - There are different options in R; <mark>`plotly`</mark> is a great one
 
 <div align = "center">
-<iframe src="plotly.html" scrolling="no" seamless="seamless" align="center" frameBorder="0" height="400" width="80%"></iframe>
+<iframe src="plotly.html" scrolling="no" seamless="seamless" align="center" frameBorder="0" height="400" width="60%"></iframe>
 </div>
 
 - This can be useful **if** interactivity serves a purpose 
@@ -740,4 +771,6 @@ class: inverse, center, middle
 
 # Thank you!
 
-<img src="qr.png" alt="Access slides" style="width:20%">
+### Questions 💭
+
+#### `guilhermegarcia.github.io/CLLEAR/garcia_slides_cllear`

@@ -142,8 +142,12 @@ tab_model(model.std, show.r2 = T,
           show.icc = F, show.ngroups = F)
 
 
+bySpeaker = dLong %>% 
+  group_by(ID, Feedback, Hours) %>% 
+  summarize(Score = mean(Score))
+
 ggplot(data = dLong, aes(x = Hours, y = Score)) + 
-  geom_point(alpha = 0.1, size = 4) + 
+  geom_point(data = bySpeaker, alpha = 0.1, size = 4, aes(group = ID)) + 
   geom_smooth(method = lm, aes(color = Feedback)) + 
   theme_classic() +
   theme(legend.position = "top") +
@@ -188,13 +192,15 @@ bayesplot::mcmc_areas(fitB, pars = c("b_H", "b_FbRecast",
 
 
 ggplot(data = dLong, aes(x = Hours, y = Score)) + 
-  geom_point(alpha = 0.1, size = 4, aes(group = ID)) + 
-  stat_smooth(method = lm, aes(color = Feedback)) + 
+  geom_point(data = bySpeaker, alpha = 0.4, 
+             size = 4, aes(group = ID, color = Feedback)) + 
+  geom_smooth(method = lm, aes(color = Feedback)) + 
   theme_classic() +
+  coord_cartesian(ylim = c(40, 100)) +
   theme(legend.position = "top") +
   theme(text = element_text(size = 18)) +
   scale_color_manual(values = c("orange", "brown")) +
-  geom_vline(xintercept = 14.3, linetype = "dashed")
+  geom_vline(xintercept = 14.6, linetype = "dashed")
 
 p = ggplotly() %>%
   layout(legend = list(
