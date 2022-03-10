@@ -41,6 +41,7 @@ class: inverse, center, middle
 xaringanExtra::use_tile_view()
 xaringanExtra::use_scribble()
 options(htmltools.dir.version = FALSE)
+xaringanExtra::use_editable()
 ```
 
 
@@ -105,6 +106,7 @@ ggplot(data = tibble(x = c(-2.5, 2.5)),
 
 ## Files
 
+- Slides at <a href = "http://guilhermegarcia.github.io" target = "_blank">`guilhermegarcia.github.io`</a>
 - We will use some hypothetical data
 - Download the data at <a href = "http://osf.io/hpt4g" target = "_blank">`http://osf.io/hpt4g`</a>
 - File name: `dataFiles.zip`
@@ -652,10 +654,9 @@ ggplot(data = dLong, aes(x = Hours, y = Score)) +
 - It's very easy to plot our model with `plot_model()` from `sjPlot`:
 
 ```{r, message=F, echo=T, dev="svg", fig.align='center', fig.width=7, fig.height=3.5}
-plot_model(model.std) + #<<
-  theme_classic() +
-  labs(title = NULL) +
-  theme(text = element_text(size = 18))
+plot_model(model.std, show.values = T) + #<<
+  labs(title = NULL) + theme_classic() + theme(text = element_text(size = 20)) +
+  geom_hline(yintercept = 0, linetype = "dashed")
 
 ```
 
@@ -670,8 +671,9 @@ plot_model(model.std) + #<<
 ```{r, message=F, echo=F, dev="svg", fig.align='center', fig.width=7, fig.height=4.5}
 
 ggplot(data = dLong, aes(x = Hours, y = Score)) + 
-  geom_point(data = bySpeaker, alpha = 0.2, 
-             size = 4, aes(group = ID)) + 
+  geom_point(data = bySpeaker, alpha = 0.4, 
+             size = 4, aes(group = ID, 
+                           color = Feedback)) + 
   geom_smooth(method = lm, aes(color = Feedback)) + 
   theme_classic() +
   coord_cartesian(ylim = c(40, 100)) +
@@ -699,7 +701,8 @@ model.std = lmer(Score ~ H * Fb +
 plot_model(model.std, show.values = T) + #<<
   labs(title = NULL) +
   theme_classic() +
-  theme(text = element_text(size = 20))
+  theme(text = element_text(size = 20)) +
+  geom_hline(yintercept = 0, linetype = "dashed")
 ```
 ]
 
