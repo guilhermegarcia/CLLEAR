@@ -724,7 +724,7 @@ class: inverse, center, middle
 
 - Maximize efficiency by balancing information and clarity
 - Have clear labels and remove anything that is *unnecessary*
-- Use colors and shapes to maximize **function** 
+- Use colors and shapes to maximize **function** (or improve accessibility with `ggpattern`)
 - "Align" figures and statistical analysis: they should complement each other
 - Figures should always have **good resolution**
 
